@@ -5,16 +5,27 @@ const bodyParser = require("body-parser");
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
+app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
   const today = new Date();
-  console.log(today.getTime());
+  let day = "";
+  const weekDays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  day = weekDays[today.getDay()];
 
-  if (today.getDay() === 6 || today.getDay() === 0) {
-    res.send("Yay it is the weekend!.");
-  } else {
-    res.send("Fucking week.");
-  }
+  res.render("list", { day: day });
+
+  //   today.getDay() === 6 || today.getDay() === 0
+  //     ? (day = "Weekend")
+  //     : (day = "Week Day");
 });
 
 app.listen(3000, () => {
