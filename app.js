@@ -1,17 +1,26 @@
 //jshint esversion:6
-const date = require("./date.js");
-const express = require("express");
-const bodyParser = require("body-parser");
+import { getDate } from "./date.js";
+import express from "express";
+import pkg from "body-parser";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// urlencoded from bodyparser
+const { urlencoded } = pkg;
 const items = [];
 const workItems = [];
 
+// Replacing __dirname in ES6 modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  res.render("list", { listTitle: date.day, items: items });
+  res.render("list", { listTitle: getDate(), items: items });
 });
 
 app.post("/", (req, res) => {
