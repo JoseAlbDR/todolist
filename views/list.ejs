@@ -4,20 +4,32 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
     <title>Todolist</title>
   </head>
 
   <body>
-    <h1><%= day %></h1>
-    <ul>
-      <% items.forEach(item =>{ %>
-      <li><%= item %></li>
-      <% }) %>
-    </ul>
+    <div class="box" id="heading">
+      <h1><%= day %></h1>
+    </div>
 
-    <form class="" action="/" method="POST">
-      <input type="text" name="nextItem" id="nextImem" autofocus />
-      <button>Add</button>
-    </form>
+    <div class="box">
+      <% items.forEach(item =>{ %>
+      <div class="item">
+        <input type="checkbox" />
+        <p><%= item %></p>
+      </div>
+      <% }) %>
+
+      <form class="item" action="/" method="POST">
+        <input
+          type="text"
+          name="nextItem"
+          id="nextItem"
+          placeholder="New Item"
+        />
+        <button type="submit" name="button">+</button>
+      </form>
+    </div>
   </body>
 </html>
