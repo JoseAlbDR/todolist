@@ -2,6 +2,7 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const items = [];
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -9,23 +10,17 @@ app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
   const today = new Date();
-  let day = "";
-  const weekDays = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-  day = weekDays[today.getDay()];
+  const day = today.toLocaleDateString("en-EN", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+  res.render("list", { day: day, items: items });
+});
 
-  res.render("list", { day: day });
-
-  //   today.getDay() === 6 || today.getDay() === 0
-  //     ? (day = "Weekend")
-  //     : (day = "Week Day");
+app.post("/", (req, res) => {
+  items.push(req.body.nextItem);
+  res.redirect("/");
 });
 
 app.listen(3000, () => {
