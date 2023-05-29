@@ -14,15 +14,24 @@ const workItems = [];
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Initialize app
 const app = express();
+
+// Use body-parser
 app.use(urlencoded({ extended: true }));
+
+// Send statics files like css
 app.use(express.static(__dirname + "/public"));
+
+// Set view engine to ejs
 app.set("view engine", "ejs");
 
+// Solve petition for root /
 app.get("/", (req, res) => {
   res.render("list", { listTitle: getDate(), items: items });
 });
 
+// Root post with redirect
 app.post("/", (req, res) => {
   console.log(req.body);
   if (req.body.list === "Work") {
@@ -34,12 +43,15 @@ app.post("/", (req, res) => {
   }
 });
 
+// Solve petition for /work
 app.get("/work", (req, res) =>
   res.render("list", { listTitle: "Work List", items: workItems })
 );
 
+// Solve petition for /about
 app.get("/about", (req, res) => res.render("about"));
 
+// Get server to listen on port 3000
 app.listen(3000, () => {
   console.log("Server running on port 3000.");
 });
