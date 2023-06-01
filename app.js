@@ -5,6 +5,7 @@ import pkg from "body-parser";
 import path from "path";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose";
+import lodash from "lodash";
 
 // Mongodb dabatase connect
 const dbConnect = async function () {
@@ -90,19 +91,6 @@ const findListAdd = async function (listName, item, res) {
   }
 };
 
-const findListRemove = async function (listName, itemId, res) {
-  try {
-    const list = await List.findOne({ name: listName });
-    List.findOneAndUpdate(
-      { name: listName },
-      { $pull: { items: { _id: itemId } } }
-    ).exec();
-    res.redirect(`/${listName}`);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
 // urlencoded from bodyparser
 const { urlencoded } = pkg;
 
@@ -136,14 +124,24 @@ app.get("/", (req, res) => {
   renderItems(res);
 });
 
+// Delete an item from default list or custom list
 app.post("/delete", (req, res) => {
   const checkedItemId = req.body.itemId;
   const listName = req.body.listTitle;
   if (listName === "Today") {
     Item.findByIdAndRemove(checkedItemId).exec();
-    res.redirect("/");
+    setTimeout(() => {
+      res.redirect("/");
+    }, 1000);
   } else {
-    findListRemove(listName, checkedItemId, res);
+    List.findOneAndUpdate(
+      { name: listName },
+      { $pull: { items: { _id: checkedItemId } } }
+    ).exec();
+
+    setTimeout(() => {
+      res.redirect(`/${listName}`);
+    }, 1000);
   }
 });
 
@@ -168,7 +166,7 @@ app.post("/", (req, res) => {
 // Solve petition for custom named list
 app.get("/:listName", (req, res) => {
   // List name from express routing
-  const listName = req.params.listName;
+  const listName = lodash.startCase(req.params.listName);
 
   // Try to load the list if exist, if not create a new one
   const loadList = async function (listName) {
