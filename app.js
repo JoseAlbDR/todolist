@@ -133,24 +133,26 @@ app.post("/delete", (req, res) => {
 
   console.log("///" + deleteList);
   console.log(req.body.listName);
+
   if (deleteList !== undefined) {
     List.deleteOne({ name: deleteList }).exec();
-  }
-
-  if (listName === "Today") {
-    Item.findByIdAndRemove(checkedItemId).exec();
-    setTimeout(() => {
-      res.redirect("/");
-    }, 1000);
+    res.redirect(`/`);
   } else {
-    List.findOneAndUpdate(
-      { name: listName },
-      { $pull: { items: { _id: checkedItemId } } }
-    ).exec();
+    if (listName === "Today") {
+      Item.findByIdAndRemove(checkedItemId).exec();
+      setTimeout(() => {
+        res.redirect("/");
+      }, 1000);
+    } else {
+      List.findOneAndUpdate(
+        { name: listName },
+        { $pull: { items: { _id: checkedItemId } } }
+      ).exec();
 
-    setTimeout(() => {
-      res.redirect(`/${listName}`);
-    }, 1000);
+      setTimeout(() => {
+        res.redirect(`/${listName}`);
+      }, 1000);
+    }
   }
 });
 
@@ -160,15 +162,21 @@ app.post("/", (req, res) => {
 
   const listName = req.body.list;
   const item = new Item({ name: req.body.nextItem });
+  const newList = req.body.nextList;
+  console.log(req.body.nextList);
 
-  // If list is default one
-  if (listName === "Today") {
-    item.save();
-    res.redirect("/");
-
-    // If list is a custom one
+  if (newList !== undefined) {
+    res.redirect(`/${newList}`);
   } else {
-    findListAdd(listName, item, res);
+    // If list is default one
+    if (listName === "Today") {
+      item.save();
+      res.redirect("/");
+
+      // If list is a custom one
+    } else {
+      findListAdd(listName, item, res);
+    }
   }
 });
 
