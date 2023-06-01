@@ -49,8 +49,6 @@ const insertItems = async function (items) {
   }
 };
 
-// await insertItems(defaultItems);
-
 // Load items from itemDB
 const loadItems = async function () {
   try {
@@ -70,6 +68,7 @@ const insertDefaultItems = async function () {
   }
 };
 
+// Load default items
 const loadDefault = async function () {
   try {
     await insertDefaultItems();
@@ -80,6 +79,7 @@ const loadDefault = async function () {
   }
 };
 
+// Find a list add an item and redirect
 const findListAdd = async function (listName, item, res) {
   try {
     const list = await List.findOne({ name: listName });
@@ -131,18 +131,18 @@ app.post("/delete", (req, res) => {
   const listName = req.body.listTitle;
   const deleteList = req.body.listName;
 
-  console.log("///" + deleteList);
-  console.log(req.body.listName);
-
+  // If deleteLIst is not undefined means that delete list checkbox is clicked
   if (deleteList !== undefined) {
     List.deleteOne({ name: deleteList }).exec();
     res.redirect(`/`);
   } else {
+    // If is the default list
     if (listName === "Today") {
       Item.findByIdAndRemove(checkedItemId).exec();
       setTimeout(() => {
         res.redirect("/");
       }, 1000);
+      // If it is another list
     } else {
       List.findOneAndUpdate(
         { name: listName },
@@ -162,9 +162,9 @@ app.post("/", (req, res) => {
 
   const listName = req.body.list;
   const item = new Item({ name: req.body.nextItem });
-  const newList = req.body.nextList;
-  console.log(req.body.nextList);
+  const newList = req.body.newList;
 
+  // If newList is not undefined means that add list + button is clicked
   if (newList !== undefined) {
     res.redirect(`/${newList}`);
   } else {

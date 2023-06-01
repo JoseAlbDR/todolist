@@ -13,13 +13,14 @@
     <form action="/" method="POST">
       <input
       type="text"
-      name="nextList"
-      id="nextList"
+      name="newList"
+      id="newList"
       placeholder="New List"
       autocomplete="off"
+      maxlength="25"
       />
         <!-- prettier-ignore -->
-      <button type="submit" name="newList" value="<%= listTitle %>">+</button>
+      <button class="delete-button" type="submit" name="newList" >+</button>
     </form>
   </div>
   <div class="box" id="heading">
@@ -44,6 +45,7 @@
       id="nextItem"
       placeholder="New Item"
       autocomplete="off"
+      
       />
         <!-- prettier-ignore -->
       <button type="submit" name="list" value="<%= listTitle %>">+</button>
