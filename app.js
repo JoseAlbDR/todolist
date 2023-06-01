@@ -129,6 +129,14 @@ app.get("/", (req, res) => {
 app.post("/delete", (req, res) => {
   const checkedItemId = req.body.itemId;
   const listName = req.body.listTitle;
+  const deleteList = req.body.listName;
+
+  console.log("///" + deleteList);
+  console.log(req.body.listName);
+  if (deleteList !== undefined) {
+    List.deleteOne({ name: deleteList }).exec();
+  }
+
   if (listName === "Today") {
     Item.findByIdAndRemove(checkedItemId).exec();
     setTimeout(() => {
