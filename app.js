@@ -43,7 +43,7 @@ const insertItems = async function (items) {
   try {
     await Item.insertMany([...items]);
     // console.log(response);
-    console.log(`${[...items]} succesfully saved into todoDB.`);
+    console.log(`Items succesfully saved into todoDB.`);
   } catch (err) {
     console.log(err);
   }
@@ -85,7 +85,7 @@ const findListAdd = async function (listName, item, res) {
     const list = await List.findOne({ name: listName });
     list.items.push(item);
     list.save();
-    res.redirect(`/${listName}`);
+    res.redirect(`/${listName.toLowerCase().split(" ").join()}`);
   } catch (err) {
     console.log(err);
   }
@@ -116,6 +116,7 @@ app.get("/", (req, res) => {
   const renderItems = async function (res) {
     try {
       const lists = await List.find({});
+
       const items = await loadDefault();
       res.render("list", { listTitle: "Today", items: items, lists: lists });
     } catch (err) {
@@ -158,6 +159,19 @@ app.post("/delete", (req, res) => {
     }
   }
 });
+
+// app.get("/empty", (req, res) => {
+//   console.log("empty");
+
+//   const emptyToday = async function () {
+//     const lists = await List.find({});
+//     console.log(lists);
+//     res.render("list", { listTitle: "Today", items: [], lists: lists });
+//     res.redirect("/");
+//   };
+
+//   emptyToday();
+// });
 
 // Root post with redirect
 app.post("/", (req, res) => {
