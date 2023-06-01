@@ -5,9 +5,9 @@
 
 <div class="box">
   <% items.forEach(item =>{ %>
-  <form action="">
+  <form action="/delete" method="POST">
     <div class="item">
-      <input type="checkbox" />
+      <input onChange="this.form.submit()" type="checkbox" name="checkbox" value="<%= item._id %>"/>
       <p><%= item.name %></p>
     </div>
   </form>
@@ -22,7 +22,7 @@
       autocomplete="off"
     />
     <!-- prettier-ignore -->
-    <button type="submit" name="list" value=<%= listTitle %>>+</button>
+    <button type="submit" name="list" value="<%= listTitle %>">+</button>
   </form>
 </div>
 <%- include("footer") -%>

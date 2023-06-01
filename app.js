@@ -105,6 +105,13 @@ app.get("/", (req, res) => {
   renderItems(res);
 });
 
+app.post("/delete", (req, res) => {
+  const checkedItemId = req.body.checkbox;
+  Item.findByIdAndRemove(checkedItemId).exec();
+
+  res.redirect("/");
+});
+
 // Root post with redirect
 app.post("/", (req, res) => {
   console.log(req.body);
