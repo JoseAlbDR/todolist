@@ -18,10 +18,17 @@ const dbConnect = async function () {
 dbConnect();
 
 // Schema and model
-const itemSchema = mongoose.Schema({
+const itemsSchema = mongoose.Schema({
   name: String,
 });
-const Item = mongoose.model("Item", itemSchema);
+
+const listSchema = {
+  name: String,
+  items: [itemsSchema],
+};
+
+const Item = mongoose.model("Item", itemsSchema);
+const List = mongoose.model("List", listSchema);
 
 // Default items
 const item1 = new Item({ name: "Welcome to your todolist!" });
@@ -123,9 +130,38 @@ app.post("/", (req, res) => {
 });
 
 // Solve petition for /work
-app.get("/work", (req, res) =>
-  res.render("list", { listTitle: "Work List", items: workItems })
-);
+app.get("/:listName", (req, res) => {
+  const listName = req.params.listName;
+
+  const loadList = async function (listName) {
+    try {
+      const foundList = await List.findOne({ name: listName });
+
+      if (foundList === null) {
+        const newList = new List({ name: listName, items: defaultItems });
+        newList.save();
+        res.render("list", { listTitle: newList.name, items: newList.items });
+        console.log("New list rendered.");
+      } else {
+        res.render("list", {
+          listTitle: foundList.name,
+          items: foundList.items,
+        });
+        console.log("Found list rendered.");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  loadList(listName);
+
+  // list.save();
+});
+
+app.post("/:listName", (req, res) => {
+  console.log(req.body);
+});
 
 // Solve petition for /about
 app.get("/about", (req, res) => res.render("about"));
