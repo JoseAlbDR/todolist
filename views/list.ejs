@@ -5,10 +5,12 @@
 
 <div class="box">
   <% items.forEach(item =>{ %>
-  <div class="item">
-    <input type="checkbox" />
-    <p><%= item %></p>
-  </div>
+  <form action="">
+    <div class="item">
+      <input type="checkbox" />
+      <p><%= item.name %></p>
+    </div>
+  </form>
   <% }) %>
 
   <form class="item" action="/" method="POST">
@@ -22,6 +24,5 @@
     <!-- prettier-ignore -->
     <button type="submit" name="list" value=<%= listTitle %>>+</button>
   </form>
-  
 </div>
 <%- include("footer") -%>
