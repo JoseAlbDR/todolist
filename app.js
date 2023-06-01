@@ -115,8 +115,9 @@ app.get("/", (req, res) => {
   // Save item name into items array
   const renderItems = async function (res) {
     try {
+      const lists = await List.find({});
       const items = await loadDefault();
-      res.render("list", { listTitle: "Today", items: items });
+      res.render("list", { listTitle: "Today", items: items, lists: lists });
     } catch (err) {
       console.log(err);
     }
@@ -171,6 +172,7 @@ app.get("/:listName", (req, res) => {
   // Try to load the list if exist, if not create a new one
   const loadList = async function (listName) {
     try {
+      const lists = await List.find({});
       const foundList = await List.findOne({ name: listName });
       if (foundList === null) {
         const newList = new List({ name: listName, items: defaultItems });
@@ -182,6 +184,7 @@ app.get("/:listName", (req, res) => {
         res.render("list", {
           listTitle: foundList.name,
           items: foundList.items,
+          lists: lists,
         });
       }
     } catch (err) {

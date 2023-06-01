@@ -1,29 +1,42 @@
 <%- include("header") -%>
-<div class="box" id="heading">
-  <h1><%= listTitle %></h1>
-</div>
+<div class="container">
+  <div class="side-list">
+    <a  href="/"><h2 class="side-box list-names">Today</h2></a>
+    <% lists.forEach(list => { %>
+      <form action="/delete" method="POST">
+        <div class="list-names">
+          <input onChange="this.form.submit()" type="checkbox" name="listName" value="<%= list.name %>"/>
+          <a  href="/<%= list.name %>"><h2 class="side-box" ><%= list.name %></h2></a>
+        </div>
+      </form>
+    <% }) %>
+  </div>
+  <div class="box" id="heading">
+    <h1><%= listTitle %></h1>
+  </div>
 
-<div class="box">
-  <% items.forEach(item =>{ %>
-  <form action="/delete" method="POST">
-    <div class="item">
-      <input onChange="this.form.submit()" type="checkbox" name="itemId" value="<%= item._id %>"/>
-      <p><%= item.name %></p>
-    </div>
-    <input type="hidden" name="listTitle" value="<%= listTitle %>">
-  </form>
-  <% }) %>
+  <div class="box">
+    <% items.forEach(item =>{ %>
+    <form action="/delete" method="POST">
+      <div class="item">
+        <input onChange="this.form.submit()" type="checkbox" name="itemId" value="<%= item._id %>"/>
+        <p><%= item.name %></p>
+      </div>
+      <input type="hidden" name="listTitle" value="<%= listTitle %>">
+    </form>
+    <% }) %>
 
-  <form class="item" action="/" method="POST">
-    <input
+    <form class="item" action="/" method="POST">
+      <input
       type="text"
       name="nextItem"
       id="nextItem"
       placeholder="New Item"
       autocomplete="off"
-    />
-    <!-- prettier-ignore -->
-    <button type="submit" name="list" value="<%= listTitle %>">+</button>
-  </form>
+      />
+        <!-- prettier-ignore -->
+      <button type="submit" name="list" value="<%= listTitle %>">+</button>
+    </form>
+  </div>
+  <%- include("footer") -%>
 </div>
-<%- include("footer") -%>
