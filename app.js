@@ -123,31 +123,50 @@ app.post("/delete", (req, res) => {
 app.post("/", (req, res) => {
   console.log(req.body);
 
+  const listName = req.body.list;
   const item = new Item({ name: req.body.nextItem });
-  item.save();
 
-  res.redirect("/");
+  // If list is default one
+  if (listName === "Today") {
+    item.save();
+    res.redirect("/");
+
+    // If list is a custom one
+  } else {
+    const findList = async function () {
+      try {
+        const list = await List.findOne({ name: listName });
+        list.items.push(item);
+        list.save();
+        res.redirect(`/${listName}`);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    findList();
+  }
 });
 
-// Solve petition for /work
+// Solve petition for custom named list
 app.get("/:listName", (req, res) => {
+  // List name from express routing
   const listName = req.params.listName;
 
+  // Try to load the list if exist, if not create a new one
   const loadList = async function (listName) {
     try {
       const foundList = await List.findOne({ name: listName });
-
       if (foundList === null) {
         const newList = new List({ name: listName, items: defaultItems });
         newList.save();
-        res.render("list", { listTitle: newList.name, items: newList.items });
-        console.log("New list rendered.");
+        res.redirect(`/${newList.name}`);
+        console.log("List already exist.");
       } else {
+        console.log("List found.");
         res.render("list", {
           listTitle: foundList.name,
           items: foundList.items,
         });
-        console.log("Found list rendered.");
       }
     } catch (err) {
       console.log(err);
@@ -155,12 +174,6 @@ app.get("/:listName", (req, res) => {
   };
 
   loadList(listName);
-
-  // list.save();
-});
-
-app.post("/:listName", (req, res) => {
-  console.log(req.body);
 });
 
 // Solve petition for /about
