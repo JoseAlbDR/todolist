@@ -79,6 +79,30 @@ const loadDefault = async function () {
   }
 };
 
+const findListAdd = async function (listName, item, res) {
+  try {
+    const list = await List.findOne({ name: listName });
+    list.items.push(item);
+    list.save();
+    res.redirect(`/${listName}`);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const findListRemove = async function (listName, itemId, res) {
+  try {
+    const list = await List.findOne({ name: listName });
+    List.findOneAndUpdate(
+      { name: listName },
+      { $pull: { items: { _id: itemId } } }
+    ).exec();
+    res.redirect(`/${listName}`);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 // urlencoded from bodyparser
 const { urlencoded } = pkg;
 
@@ -113,10 +137,14 @@ app.get("/", (req, res) => {
 });
 
 app.post("/delete", (req, res) => {
-  const checkedItemId = req.body.checkbox;
-  Item.findByIdAndRemove(checkedItemId).exec();
-
-  res.redirect("/");
+  const checkedItemId = req.body.itemId;
+  const listName = req.body.listTitle;
+  if (listName === "Today") {
+    Item.findByIdAndRemove(checkedItemId).exec();
+    res.redirect("/");
+  } else {
+    findListRemove(listName, checkedItemId, res);
+  }
 });
 
 // Root post with redirect
@@ -133,17 +161,7 @@ app.post("/", (req, res) => {
 
     // If list is a custom one
   } else {
-    const findList = async function () {
-      try {
-        const list = await List.findOne({ name: listName });
-        list.items.push(item);
-        list.save();
-        res.redirect(`/${listName}`);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    findList();
+    findListAdd(listName, item, res);
   }
 });
 
