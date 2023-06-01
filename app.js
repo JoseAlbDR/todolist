@@ -4,11 +4,27 @@ import express from "express";
 import pkg from "body-parser";
 import path from "path";
 import { fileURLToPath } from "url";
+import mongoose from "mongoose";
+
+// Mongodb dabatase connect
+const dbConnect = async function () {
+  try {
+    await mongoose.connect("mongodb://127.0.0.1:27017/todoDB");
+    console.log("Connected to mongodb: todoDB.");
+  } catch (err) {
+    console.log(err);
+  }
+};
+dbConnect();
+
+// Schema and model
+const itemSchema = mongoose.Schema({
+  name: String,
+});
+const Item = mongoose.model("Item", itemSchema);
 
 // urlencoded from bodyparser
 const { urlencoded } = pkg;
-const items = [];
-const workItems = [];
 
 // Replacing __dirname in ES6 modules
 const __filename = fileURLToPath(import.meta.url);
