@@ -5,7 +5,7 @@ import pkg from "body-parser";
 import path from "path";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose";
-import lodash from "lodash";
+import _ from "lodash";
 
 // Mongodb dabatase connect
 const dbConnect = async function () {
@@ -134,7 +134,10 @@ app.post("/delete", (req, res) => {
   // If deleteLIst is not undefined means that delete list checkbox is clicked
   if (deleteList !== undefined) {
     List.deleteOne({ name: deleteList }).exec();
-    res.redirect(`/`);
+
+    setTimeout(() => {
+      res.redirect(`/`);
+    }, 1000);
   } else {
     // If is the default list
     if (listName === "Today") {
@@ -150,7 +153,7 @@ app.post("/delete", (req, res) => {
       ).exec();
 
       setTimeout(() => {
-        res.redirect(`/${listName}`);
+        res.redirect(`/${listName.toLowerCase().split(" ").join("-")}`);
       }, 1000);
     }
   }
@@ -166,7 +169,10 @@ app.post("/", (req, res) => {
 
   // If newList is not undefined means that add list + button is clicked
   if (newList !== undefined) {
-    res.redirect(`/${newList}`);
+    const formatList = newList.split(" ").join("-");
+    console.log(formatList);
+
+    res.redirect(`/${formatList.toLowerCase()}`);
   } else {
     // If list is default one
     if (listName === "Today") {
@@ -183,7 +189,7 @@ app.post("/", (req, res) => {
 // Solve petition for custom named list
 app.get("/:listName", (req, res) => {
   // List name from express routing
-  const listName = lodash.startCase(req.params.listName);
+  const listName = _.startCase(req.params.listName);
 
   // Try to load the list if exist, if not create a new one
   const loadList = async function (listName) {
@@ -193,7 +199,7 @@ app.get("/:listName", (req, res) => {
       if (foundList === null) {
         const newList = new List({ name: listName, items: defaultItems });
         newList.save();
-        res.redirect(`/${newList.name}`);
+        res.redirect(`/${newList.name.toLowerCase().split(" ").join("-")}`);
         console.log("List already exist.");
       } else {
         console.log("List found.");
