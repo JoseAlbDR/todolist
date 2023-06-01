@@ -23,6 +23,38 @@ const itemSchema = mongoose.Schema({
 });
 const Item = mongoose.model("Item", itemSchema);
 
+// Default items
+const item1 = new Item({ name: "Welcome to your todolist!" });
+const item2 = new Item({ name: "Hit the + button to add a new item." });
+const item3 = new Item({ name: "<-- Hit this to delete an item." });
+
+const defaultItems = [item1, item2, item3];
+// Insert items into database
+const insertItems = async function (items) {
+  try {
+    await Item.insertMany([...items]);
+    // console.log(response);
+    console.log(`${[...items]} succesfully saved into todoDB.`);
+  } catch (err) {
+    console.log(err);
+  }
+};
+// await insertItems(defaultItems);
+
+// Load items from itemDB
+const loadItems = async function () {
+  try {
+    const items = await Item.find({});
+    console.log(`${items} succesfully loaded.`);
+    return items;
+  } catch (err) {
+    console.log(err);
+  }
+};
+const data = await loadItems();
+// Save item name into items array
+const items = data.map((item) => item.name);
+
 // urlencoded from bodyparser
 const { urlencoded } = pkg;
 
@@ -44,7 +76,7 @@ app.set("view engine", "ejs");
 
 // Solve petition for root /
 app.get("/", (req, res) => {
-  res.render("list", { listTitle: getDate(), items: items });
+  res.render("list", { listTitle: "Today", items: items });
 });
 
 // Root post with redirect
