@@ -1,16 +1,18 @@
 //jshint esversion:6
-import { getDate } from "./date.js";
 import express from "express";
 import pkg from "body-parser";
 import path from "path";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose";
 import _ from "lodash";
+import { PASS } from "./private/config.js";
 
 // Mongodb dabatase connect
 const dbConnect = async function () {
   try {
-    await mongoose.connect("mongodb://127.0.0.1:27017/todoDB");
+    await mongoose.connect(
+      `mongodb+srv://jadr:${PASS}@cluster0.en3wbp7.mongodb.net/todoDB`
+    );
     console.log("Connected to mongodb: todoDB.");
   } catch (err) {
     console.log(err);
