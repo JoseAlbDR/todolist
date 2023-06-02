@@ -8,7 +8,6 @@ Features
 
 - Create and delete custom task lists.
 - Add and delete list items.
-- Mark items as completed.
 - Intuitive and user-friendly interface.
 
 Installation
