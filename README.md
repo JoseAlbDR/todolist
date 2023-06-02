@@ -28,11 +28,6 @@ Usage
 - Editing a Custom List: Click on the name of a custom list on the home page to view the list items. You can add, delete, and mark items as completed.
 - Deleting a List: Check the "Delete List" checkbox next to the list name and click the "Update List" button. The list and all its items will be permanently deleted.
 
-About Page (/about)
--------------------
-
-Displays information about the project and its development.
-
 Technologies Used
 -----------------
 
