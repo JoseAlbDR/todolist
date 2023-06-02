@@ -25,7 +25,7 @@ Usage
 
 - Home Page (/): Displays the default task list ("Today") and all existing custom lists. You can add items to the default list or select a custom list to view and edit.
 - Creating a Custom List: Click the "+ New List" button and provide a name for the new list. A new list will be created with the default items.
-- Editing a Custom List: Click on the name of a custom list on the home page to view and edit the list items. You can add, delete, and mark items as completed.
+- Editing a Custom List: Click on the name of a custom list on the home page to view the list items. You can add, delete, and mark items as completed.
 - Deleting a List: Check the "Delete List" checkbox next to the list name and click the "Update List" button. The list and all its items will be permanently deleted.
 
 About Page (/about)
