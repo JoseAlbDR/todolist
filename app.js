@@ -6,7 +6,6 @@ import path from "path";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose";
 import _ from "lodash";
-import { PASS } from "./private/config.js";
 
 // Mongodb dabatase connect
 const dbConnect = async function () {
