@@ -1,4 +1,5 @@
 //jshint esversion:6
+import "dotenv/config";
 import express from "express";
 import pkg from "body-parser";
 import path from "path";
@@ -11,7 +12,7 @@ import { PASS } from "./private/config.js";
 const dbConnect = async function () {
   try {
     await mongoose.connect(
-      `mongodb+srv://jadr:${PASS}@cluster0.en3wbp7.mongodb.net/todoDB`
+      `mongodb+srv://jadr:${process.env.PASS}@cluster0.en3wbp7.mongodb.net/todoDB`
     );
     console.log("Connected to mongodb: todoDB.");
   } catch (err) {
@@ -237,6 +238,6 @@ app.get("/:listName", (req, res) => {
 app.get("/about", (req, res) => res.render("about"));
 
 // Get server to listen on port 3000
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log("Server running on port 3000.");
 });
